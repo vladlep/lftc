@@ -24,6 +24,35 @@
  }	;
  
  
+  struct tabelaSimboluri
+ {
+
+   char nume[15];
+   char clasa[15];
+   int tip ; 
+   int index_val;
+	 int adrel;
+	 int deplrec;
+	 int nivel;
+	 int nr_par;
+	 int dim_var;
+	 int adr_start;
+	 int lista_param[2][10];
+
+	 //need an index for up ? 
+	 int min;
+	 int max;
+	 int lista_rec[10];
+	 int nr_lista_rec;
+	 int incdom;
+ }	;
+ 
+ #define MAX_TS 100
+ struct tabelaSimboluri ts[MAX_TS];
+ int dimts;
+ int dim_parent;
+ int nivel;
+ int adrel; 
  struct atomi *first;
  
  int constIntreg[100];
@@ -34,10 +63,10 @@
  int lenConstInt, lenConstReal, lenConstChar, lenConstString, lenIdentif; // lungimile tablourilor
  
  //tabela cu toate cuvintele limbajului
- #define TAB_CHEI_SIZE 28
+ #define TAB_CHEI_SIZE 29
  char *tabelaChei[] = {"and","begin","case","char","const","div","do","downto","else",
       "end","for","function","if","integer","mod","not","of","or","procedure","program","real",
-      "repeat","then","until","var","while","record","array"};
+      "repeat","then","until","var","while","record","array","to"};
  #define TAB_OPERATORI_SIZE 15
  char *tableOperatori[]={"+","-","*","/","(", ")","[","]","<","<=",">",">=","<>","=",":="} ;    
  #define TAB_DELIMITER_SIZE 5
@@ -55,4 +84,13 @@
  //afisez pe ecran toti atomii memorati
  void printfAtoms();    
  
+  void printTS();
+  void removeLevel(int nivel);
+ 
+  struct atomi* checkBlock(struct atomi *curent);
+  struct atomi* expresie(struct atomi* curent);
+  struct atomi* instrComp(struct atomi* curent);
+  struct atomi* instr(struct atomi* curent);
+  struct atomi* conditie(struct atomi* curent);
+  
 #endif
