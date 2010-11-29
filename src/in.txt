@@ -1,14 +1,10 @@
 
 program p;
 
-const 
- a = 7;
- b = 10;
- c = 20;
+
 
 var
  d, e, f : char;
- 
  j : array [20..30] of real;
  g, h, i : integer;
  k, l : 
@@ -21,7 +17,7 @@ procedure p2(x, y : real)
  var 
   z : record z1, z2 : char; end;
   begin
-	 z := 2;
+	 z := 2.1;
 	end;
 	
  function f1(v : integer) : real;
@@ -29,20 +25,19 @@ procedure p2(x, y : real)
    w : array [7..10] of integer;
    
 	 begin
-	 x := 2;
+	 x := 'a';
 	 end;
 
 begin
-orice := 123;
-tab[2] := alta;
-var3 := (12 + 3 * 4);
+
+
 
 begin
-var4 := fct( (22+3) , var3);
+d := f1( (22+3) , i);
 end;
 
 
-while a< 3
+while i< 3
 do 
- a := a+2;
+ g := g + 2;
 end.
