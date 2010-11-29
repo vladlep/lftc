@@ -7,6 +7,7 @@ var
  d, e, f : char;
  j : array [20..30] of real;
  g, h, i : integer;
+ alfa : real;
  k, l : 
   record 
    m : integer; 
@@ -17,15 +18,15 @@ procedure p2(x, y : real)
  var 
   z : record z1, z2 : char; end;
   begin
-	 z := 2.1;
+	 x := 2.1;
 	end;
 	
- function f1(v : integer) : real;
+ function f1(v : integer) : integer;
   var
    w : array [7..10] of integer;
    
 	 begin
-	 x := 'a';
+	 v := 1;
 	 end;
 
 begin
@@ -33,11 +34,11 @@ begin
 
 
 begin
-d := f1( (22+3) , i);
+g := f1( (22+3) , i);
 end;
 
 
 while i< 3
 do 
- g := g + 2;
+ g := g + 2 +'a';
 end.
