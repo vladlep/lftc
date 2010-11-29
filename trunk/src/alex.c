@@ -32,6 +32,60 @@
  void writeToConstString(char* str);
  */
  
+ 
+ //verifica daca tipul trimis e acceptat cu tipul memorat pana acum in variabila tip;
+int typeMatch(int left)
+{
+ 		if(left >= tip) // corect
+		 		return 1;
+
+    return 0;
+}
+
+/**
+modifica tipul daca e nevoie. Exemplu float si era int ---> tip devine float
+se merge pe tipurile din structura TS :
+	 0 = char  	 1 = integer 		2 = real		
+	 
+in structura atom avem : 3 = int 4 = real 5 = char
+cele din atom se transforma  cu formula : (tip - 2) %3 
+
+*/
+void typeCalc(int urm)
+{
+ 		 if(urm > 2)
+ 		  			urm = (urm -2) %3;
+ 		if( tip < urm)
+ 				tip = urm;
+    
+
+}
+ //find an atom in the TS;
+int checkAprear(char nume[])
+{
+ 		int i;
+ 		for(i = 0;i<dimts; i++)
+ 				if(strcmp(ts[i].nume, nume)==0 )
+				    return i;
+
+return -1;
+}
+
+  //verific daca am dubluri in TS si printez eroare 
+int  checkDuplicaTS()
+{
+  int i;
+  for(int i = 0; i< dimts; i++)
+  for (int j = i+1; j< dimts; j++)
+   if(strcmp(ts[i].nume, ts[j].nume)==0 )
+   {
+      printf("\nDouble declaration of variable %s ! \n\n",ts[i].nume );
+      return 0;
+   }
+   return 1;
+}
+
+ 
   //fucntions to check the semantics 
   
 int constanta(struct atomi* curent)
@@ -248,7 +302,9 @@ struct atomi* tipTablou(struct atomi* curent)
 
 																	}
 																//	dimts++;
-																	printTS();
+																	
+                                  
+                                  printTS();
 																	return curent->urm;
                                   }else
                                   {
@@ -474,6 +530,8 @@ struct atomi* declarVar(struct atomi* curent)
 	 curent = curent->urm;
    if(strcmp(curent->atom,"j")==0)
    {
+                                                                    
+                                  
 					 printf("\n\n\naaaa\n\n\n\n"); printTS();
 	 }
        if(curent->codLexical == 7 && curent->atributId ==1) //,
@@ -824,8 +882,19 @@ struct atomi* factor(struct atomi* curent)
 						{
 						 	curent = curent->urm;
 						 	if( !((curent->codLexical == 0 && curent->atributId ==4)) || (curent->codLexical ==7 && curent->atributId==2 ) || (curent->codLexical ==0 && curent->atributId==6)) // ( || . || [
-						 			return curent;// just a simple identificator;
-								
+						 	{	
+							
+								int index = checkAprear(curent->pre->atom);
+								if(index == -1)
+												 {
+												 	 printf("Undeclared variable %s at line %d",curent->pre->atom,curent->pre->lineNO);
+												 	 return NULL;
+												 }
+								typeCalc( ts[index].tip);
+								printf("\n\nindex %d tipul nou %d\n\n", index,tip);
+								getchar();
+								return curent;// just a simple identificator;										
+						  }	
 							if(curent->codLexical == 0 && curent->atributId ==4)	// (
 							{
 							     
@@ -840,9 +909,23 @@ struct atomi* factor(struct atomi* curent)
 							 
 							 	if(curent->codLexical == 7 && curent->atributId ==2)	// .
 							{
+							 	curent = curent->urm;
 							 	   if(curent->codLexical == 2 )
-							 	    				 return curent->urm;
-					 	       printf("Missing indetifier after. at line %d\n",curent->lineNO);
+							 	   {
+									 				
+												  int index = checkAprear(curent->atom);
+													if(index == -1)
+																	 {
+																	 	 printf("Undeclared variable %s at line %d",curent->atom,curent->lineNO);
+																	 	 return NULL;
+																	 }
+													typeCalc( ts[index].tip);
+													printf("\n\nindex %d tipul nou %d\n\n", index,tip);
+													getchar();								 
+							 				 return curent->urm;
+					 	       
+									 }
+									 printf("Missing indetifier after. at line %d\n",curent->lineNO);
 									 return NULL;
 							}
 							
@@ -862,6 +945,9 @@ struct atomi* factor(struct atomi* curent)
 						if( constanta(curent) ==1  ) // constanta
 							{
 						//	 printf("const %s\n",curent->atom);
+								  typeCalc( curent->codLexical);// schimb type-ul
+								  printf("line ~ 950 type %d dupa constanta %s\n", tip, curent->atom);
+								  getchar();
 							 		return curent->urm;
 							}
 							
@@ -919,6 +1005,17 @@ struct atomi* variabila(struct atomi* curent)
  		 if(!(curent->codLexical == 2 )) // identificator  
 			return NULL;
 		 
+		 	
+			  int index = checkAprear(curent->atom);
+				if(index == -1)
+								 {
+								 	 printf("Undeclared variable %s at line %d\n",curent->atom,curent->lineNO);
+								 	 return NULL;
+								 }
+				typeCalc( ts[index].tip);
+				printf("\n\nindex in TS  %d pt var %s. Tipul nou %d\n\n", index,curent->atom,tip);
+				getchar();								 
+
 		 curent = curent->urm;
 		 
 		 if(! ((curent->codLexical ==0 && curent->atributId==6 ) || (curent->codLexical ==7 && curent->atributId==2 )))// [ sau .
@@ -951,24 +1048,36 @@ return : curent if NOT an instAtrib, NULL if it is and it's incorect or ; if it'
 */
 struct atomi* instrAtrib(struct atomi* curent)
 {
+ 			 int left, right;
  			 printf("instr->instr atribuire\n");
   	 if(!(curent->codLexical == 2 )) // identificator     
 	     return curent;
 
 	     // daca ajunge aici inseaman ca avem o instr atribuire
+			 		tip = -1; // initializam tipul;
 			 	 curent = variabila(curent);
 			 	 if(curent == NULL)
 			 	  return NULL;
-			 	  
+			 	  left = tip;
+
 			 if(!(curent->codLexical ==0 && curent->atributId==14 ) )// :=
        {
         printf("No := after variabila . Line %d \n",curent->lineNO);
         return NULL;
        }
        curent = curent->urm;
-       
+			 
+			 tip = -1; // initializez tipul din nou
        curent= expresie(curent);
-       
+       if ( typeMatch(left) ==0 ) // nu e bun 
+       {
+			 		printf("\nIncorect types. left  %d right %d. Line %d \n",left,tip,curent->lineNO);
+					getchar();
+					return NULL;
+		 	 }else
+		 	 {printf("corect type  left  %d right %d. \n",left,tip);
+			 getchar();
+			 }
        return curent; // poate fi NULL sau altul
 }
 
@@ -1382,6 +1491,8 @@ void printTS()
  int i,j;
  //dimts =3;
  //printf("i nume	cls	tip	i_val	adrl deplrec nivel	nr_par d_var adr_st l_par min	max	l_rec	nr_l_r incdom");
+ if( checkDuplicaTS() ==0)
+   return;
  printf("Tabela simbolica:\n\n");
  for (i =0; i<dimts; i++)
  {

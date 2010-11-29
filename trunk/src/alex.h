@@ -27,7 +27,7 @@
   struct tabelaSimboluri
  {
 
-   char nume[15];
+   char nume[25];
    char clasa[15];
    int tip ; 
    int index_val;
@@ -38,8 +38,6 @@
 	 int dim_var;
 	 int adr_start;
 	 int lista_param[2][10];
-
-	 //need an index for up ? 
 	 int min;
 	 int max;
 	 int lista_rec[10];
@@ -53,6 +51,7 @@
  int dim_parent;
  int nivel;
  int adrel; 
+ int tip;
  struct atomi *first;
  
  int constIntreg[100];
@@ -72,7 +71,7 @@
  #define TAB_DELIMITER_SIZE 5
  char *tableDelimiter[]={";",".",",",":",".."};
       
- 
+
  void sapareteAtoms();
  
  //descide fisierul
@@ -94,3 +93,4 @@
   struct atomi* conditie(struct atomi* curent);
   
 #endif
+
