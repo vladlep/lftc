@@ -6,7 +6,8 @@ program p;
 var
  d, e, f : char;
  j : array [20..30] of real;
- g, h, i : integer;
+ g : char;
+ h, i : integer;
  alfa : real;
  k, l : 
   record 
@@ -26,7 +27,7 @@ procedure p2(x, y : real)
    w : array [7..10] of integer;
    
 	 begin
-	 v := 1;
+	 v := 'a';
 	 end;
 
 begin
@@ -38,7 +39,7 @@ g := f1( (22+3) , i);
 end;
 
 
-while i< 3
+while f< 3
 do 
  g := g + 2 +'a';
 end.
