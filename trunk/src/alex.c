@@ -36,6 +36,7 @@
  //verifica daca tipul trimis e acceptat cu tipul memorat pana acum in variabila tip;
 int typeMatch(int left)
 {
+ 		
  		if(left >= tip) // corect
 		 		return 1;
 
@@ -55,7 +56,7 @@ void typeCalc(int urm)
 {
  		 if(urm > 2)
  		  			urm = (urm -2) %3;
- 		if( tip < urm)
+		 if( tip < urm)
  				tip = urm;
     
 
@@ -738,7 +739,7 @@ returned : first atom after ;
 struct atomi* declarFunction(struct atomi* curent)
 { 
        printf(" declarFunction\n");
-
+			 int start = dimts;
        strcpy(ts[dimts].clasa,"function");
        ts[dimts].nivel  = nivel-1;
        ts[dimts].adr_start = -1;
@@ -770,6 +771,9 @@ struct atomi* declarFunction(struct atomi* curent)
         printf("No simpe type after : Line %d. We have %s \n",curent->lineNO, curent->atom);
         return NULL;
        }
+			 //printf("dimts %d  %s",start,ts[dimts]. nume );    
+		//	 getchar();  
+			 ts[start].tip = curent->atributId/10; 
        curent = curent ->urm;
         
       
@@ -974,23 +978,32 @@ return : firs atom after expresie
 */
 struct atomi* expresie(struct atomi* curent)
 {
+ 			 				int aux =-1;
  	           // printf("expresie \n");
 							struct atomi* temp;
 							do
 							{
 							temp = curent;
-  						
-  						curent = factor(curent);
+  						aux = tip;
+  						tip = 0;
+							curent = factor(curent);
   						if(curent == NULL)
   											return NULL;
-  											
+  							if (aux != 0 && tip ==0) // era char si s-a facut adunare cu 
+							{
+							 	 printf("Eror. Type missmatch line %d\n", curent->lineNO);
+							 	 return NULL;
+							 }
+							 if(tip < aux)  
+							 				tip = aux;					
   					  if( !( opAdd(curent) || opMul(curent) )) 
   						{
 							
 							 		return curent;
 					 		}
 							curent = curent->urm;
-							
+						
+							 				
 							}while(1); //do until no return is found
   						
     return NULL; // it will never get here;
@@ -1081,8 +1094,24 @@ struct atomi* instrAtrib(struct atomi* curent)
        return curent; // poate fi NULL sau altul
 }
 
+// 0 = error 1 == ok
+int typeRel(int left)
+{
+ if(left == 0)
+   if(tip == 0)
+	   return 1;
+	  else 
+		 return 0; 	
+ if(tip >0 && left > 0)
+   return 1;
+		 	
+	return 0; // pt structuri; 		
+}
+
 struct atomi* exprRel(struct atomi* curent)
 {
+ 			 int leftType= -3;
+ 			 tip = -3;
  			 	if(curent->codLexical == 0 && curent->atributId ==4) //(
 						{
 						  curent = curent->urm;
@@ -1095,6 +1124,8 @@ struct atomi* exprRel(struct atomi* curent)
 									return NULL;		
 						}
 				curent = expresie(curent);
+				leftType = tip;
+ 			  
 			 if(curent == NULL)
  			 					 return NULL;
  			
@@ -1104,8 +1135,17 @@ struct atomi* exprRel(struct atomi* curent)
 			 		 return NULL;
 			 }				 
  			 curent = curent->urm;
-				
+
+				tip = -3;
 				curent = expresie(curent);
+	
+
+				if( typeRel(leftType) == 0)
+				{
+				 		printf("code lyne 1125. Error expresie rel left %d right %d",leftType,tip);
+				 		return NULL;
+	 		  }
+				tip  = 1; // integer -- result after
 				return curent; // can be NULL						 
 }
 
@@ -1132,8 +1172,11 @@ struct atomi* exprLogica(struct atomi* curent)
 	 			      return NULL;
      					
 					if(opLog(curent) == 0) //false
-						return curent; //it's ok and finished
-					
+					{
+					 	tip = 1;							 
+					 	return curent; //it's ok and finished
+					 	
+					}
 					curent = curent->urm;			 		
 			 }while(1);
 
@@ -1155,6 +1198,7 @@ struct atomi* conditie(struct atomi* curent)
 */
 struct atomi* instrIf(struct atomi* curent)
 {
+ 			 
  			 curent = conditie(curent);
  			 if(curent == NULL)
  			 					 return NULL;
