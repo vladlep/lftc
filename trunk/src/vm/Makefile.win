@@ -1,0 +1,32 @@
+# Project: virtualMachine
+# Makefile created by Dev-C++ 4.9.9.1
+
+CPP  = g++.exe
+CC   = gcc.exe
+WINDRES = windres.exe
+RES  = 
+OBJ  = vm.o main.o $(RES)
+LINKOBJ  = vm.o main.o $(RES)
+LIBS =  -L"C:/ProgramFiles/Dev-Cpp/lib"  
+INCS =  -I"C:/ProgramFiles/Dev-Cpp/include" 
+CXXINCS =  -I"C:/ProgramFiles/Dev-Cpp/include/c++/3.3.1"  -I"C:/ProgramFiles/Dev-Cpp/include/c++/3.3.1/mingw32"  -I"C:/ProgramFiles/Dev-Cpp/include/c++/3.3.1/backward"  -I"C:/ProgramFiles/Dev-Cpp/lib/gcc-lib/mingw32/3.3.1/include"  -I"C:/ProgramFiles/Dev-Cpp/include" 
+BIN  = virtualMachine.exe
+CXXFLAGS = $(CXXINCS)  
+CFLAGS = $(INCS)  
+
+.PHONY: all all-before all-after clean clean-custom
+
+all: all-before virtualMachine.exe all-after
+
+
+clean: clean-custom
+	rm -f $(OBJ) $(BIN)
+
+$(BIN): $(OBJ)
+	$(CPP) $(LINKOBJ) -o "virtualMachine.exe" $(LIBS)
+
+vm.o: vm.cpp
+	$(CPP) -c vm.cpp -o vm.o $(CXXFLAGS)
+
+main.o: main.cpp
+	$(CPP) -c main.cpp -o main.o $(CXXFLAGS)
