@@ -1,8 +1,6 @@
 #include <stdio.h>
 
-#include "alex.h"
-#include "asin.h"
-#include "common.h"
+
 #include "vm.h"
 
 void testLOD1();
@@ -12,51 +10,7 @@ int main(int argc, char *argv[])
 	testLOD1();
 	getch();
 }
-/*{
-	FILE *f;
-	if((f = fopen("asin1.txt","r")) == NULL)
-	{	
-		perror("Nu pot deschide fisierul de intrare\n");
-		getch();
-		return 0;
-	}
 
-	struct location errorLoc;
-	errorLoc.row = 0;
-	errorLoc.tempCol = 0;
-	errorLoc.col = 0;
-			
-	structAtom vectorAtom[1000];
-	int nrAtomi = 0;
-	if(startAnalyzeALEX(f, errorLoc, vectorAtom, &nrAtomi) == -1)
-	{
-		printf("eroare lexicala la randul %d, coloana %d\n",errorLoc.row+1, errorLoc.col+1);
-		getch();
-		exit(0);
-	}
-	printf("analiza lexicala terminata corect \n");
-	afisareAtomi(vectorAtom, nrAtomi);
-	fclose(f);
-	int errorLocAtom = -1;
-	char errorString[1000] = "";
-	struct tsT tsAux;
-	tsInitializareTSAux(&tsAux);
-	struct tc tcV[100];
-	struct ts tsV[100];
-
-	if(startAnalyzeASIN(&errorLocAtom, errorString, vectorAtom, nrAtomi, tsAux, tsV, tcV) == -1)
-	{
-		printf("\neroare sintactica- atom %d\n", errorLocAtom);
-		printf("%s\n",errorString);
-		getch();
-		exit(0);
-	}
-	printf("analiza sintactica terminata corect \n");
-
-	getch();
-	return 1;
-}
-*/
 
 void testLOD1()
 {

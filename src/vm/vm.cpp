@@ -1,10 +1,11 @@
 #include "vm.h"
 //vbaza porneste de la 1 pentru primul nivel din baza
-
+//incarca valoarea
 void LOD(virtualM *vm, int nivel, int adrel)
 {
 	int i = vm->vbaza;
 	stivaApSub *baza = getStivaApSubI(vm->baza, i);
+	//ajung la primul element de pe nivelul din stiva de baza
 	while(nivel != baza->level)
 	{
 		i--;
@@ -27,7 +28,7 @@ void LODI(virtualM *vm, int iconst)
 	adaugaNodStiva(vm, vm->tab_const[iconst].tip_const, vm->tab_const[iconst].con);
 	vm->ni = vm->ni + 2;
 }
-
+//faci o adresa catre urm
 void LODA(virtualM *vm, int nivel, int adrel)
 {
 	int i = vm->vbaza;
@@ -721,7 +722,7 @@ stivaLucru *getStivaLucruI(stivaLucru *stiva, int index)
 	}
 	return stivaAux;
 }
-
+/** returneaza varful stivei*/
 stivaApSub *getStivaApSubI(stivaApSub *stiva, int index)
 {
 	stivaApSub *stivaAux = stiva;
@@ -763,6 +764,7 @@ void afisareStivaLucru(stivaLucru *stiva)
 			printf("tip nod:%s valoare nod:%d\n", s->tip_nod, *((int *)s->info));
 		s = s->urm;
 	}
+	printf("\n");
 }
 
 void afisareStivaApSub(stivaApSub *stiva)
