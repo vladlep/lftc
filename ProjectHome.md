@@ -1,0 +1,1 @@
+lab lftc . toate temele
